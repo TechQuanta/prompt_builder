@@ -58,6 +58,7 @@ button:active { transform: translateY(0) scale(.98); }
 
 .parallax-backdrop { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
 body > main { position: relative; z-index: 1; }
+body > main > .min-h-screen { background-color: transparent !important; }
 .parallax-orbit { position: absolute; display: block; width: 46rem; height: 46rem; border: 1px solid color-mix(in srgb, var(--foreground), transparent 90%); border-radius: 999px; will-change: transform; }
 .parallax-orbit-one { top: -27rem; right: -18rem; }
 .parallax-orbit-two { bottom: -31rem; left: -22rem; width: 58rem; height: 58rem; }
