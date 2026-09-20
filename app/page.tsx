@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Check, ChevronDown, Clipboard, Code2, FileJson, Github, Image, LoaderCircle, Moon, Search, Sparkles, Sun, Wand2 } from "lucide-react";
-import { compilePrompt, defaultBrief, describeNature, selectedEntries, toSchema, type PromptBrief } from "@/lib/prompt-builder";
+import { compilePrompt, defaultBrief, describeNature, selectedEntries, toSchema, validateBrief, type PromptBrief } from "@/lib/prompt-builder";
 
 const TYPES = [
   { value: "None", label: "Auto", icon: Sparkles, note: "Let the request choose the structure" },
@@ -42,8 +42,8 @@ const CONTROLS: Record<string, Control[]> = {
     { key: "output", label: "Format", options: ["None", "Checklist", "Timeline", "Table", "Markdown"] },
   ],
   Code: [
-    { key: "codeLanguage", label: "Language", options: ["None", "Python", "TypeScript", "JavaScript", "SQL", "Java"] },
-    { key: "codeFramework", label: "Framework", options: ["None", "React", "Next.js", "FastAPI", "Django", "Node.js"] },
+    { key: "codeLanguage", label: "Language", options: ["None", "Python", "TypeScript", "JavaScript", "SQL", "Java", "Go", "Rust", "C#", "PHP"] },
+    { key: "codeFramework", label: "Framework", options: ["None", "React", "Next.js", "FastAPI", "Django", "Node.js", "Flask", "Vue", "Express", "Spring Boot"] },
     { key: "codeIntent", label: "Task", options: ["None", "Write", "Debug", "Review", "Refactor", "Explain"] },
     { key: "codeTests", label: "Tests", options: ["None", "Include tests", "Test plan", "No tests"] },
     { key: "output", label: "Format", options: ["None", "Markdown", "JSON", "Step-by-step"] },
@@ -66,12 +66,13 @@ export default function Page() {
   const [dark, setDark] = useState(false);
   const schema = useMemo(() => toSchema(brief), [brief]);
   const prompt = useMemo(() => compilePrompt(brief), [brief]);
+  const validation = useMemo(() => validateBrief(brief), [brief]);
   const writing = Boolean(brief.prompt.trim());
   const active = TYPES.find((item) => item.value === brief.task) ?? TYPES[0];
   const fields = CONTROLS[brief.task] ?? CONTROLS.None;
   const entries = selectedEntries(brief);
   const pillEntries = entries.filter(({ key }) => typeof brief[key] === "string");
-  const quality = Math.min(100, Math.round(brief.prompt.trim().length * 1.15) + entries.length * 10);
+  const quality = validation.score;
   const set = <K extends keyof PromptBrief>(key: K, value: PromptBrief[K]) => setBrief((current) => ({ ...current, [key]: value }));
   const changeTask = (task: string) => setBrief((current) => ({ ...current, task, ...Object.fromEntries(TYPE_ONLY_KEYS.map((key) => [key, "None"])) }) as PromptBrief);
   const copy = async () => { await navigator.clipboard.writeText(prompt); setCopied(true); setTimeout(() => setCopied(false), 1200); };
@@ -82,8 +83,9 @@ export default function Page() {
       <div className={`composer ${writing ? "composer-active" : ""}`}>
         {writing && <div className="composer-toolbar"><div className="control-row"><div className="type-menu"><button onClick={() => setMenu(!menu)} className="type-trigger"><active.icon size={14} /><span>{active.label}</span><ChevronDown size={13} /></button>{menu && <div className="type-popover">{TYPES.map((item) => <button key={item.value} onClick={() => { changeTask(item.value); setMenu(false); }} className={item.value === brief.task ? "type-option selected" : "type-option"}><item.icon size={15} /><span><b>{item.label}</b><small>{item.note}</small></span></button>)}</div>}</div>{fields.map((field) => <MiniSelect key={String(field.key)} label={field.label} value={String(brief[field.key])} options={field.options} onChange={(value) => set(field.key, value as never)} />)}</div><label className="nature-control"><span>Prompt nature</span><small>Direct</small><input aria-label="Prompt nature" type="range" min="0" max="100" value={brief.promptNature} onChange={(event) => set("promptNature", Number(event.target.value))} /><b>{describeNature(brief.promptNature)}</b><small>Exploratory</small></label></div>}
         <textarea aria-label="Your prompt" value={brief.prompt} onChange={(event) => set("prompt", event.target.value)} placeholder="Ask anything, describe a task, or paste your rough notes…" />
-        <div className="composer-footer"><span>{writing ? `${active.label} controls are active` : "Your prompt stays private in this browser"}</span><button className={writing ? "generate-ready" : "generate-disabled"} disabled={!writing}>Refine <Sparkles size={15} /></button></div>
+        <div className="composer-footer"><span>{writing ? `${active.label} controls are active` : "Your prompt stays private in this browser"}</span><button className={writing && validation.valid ? "generate-ready" : "generate-disabled"} disabled={!writing || !validation.valid}>Refine <Sparkles size={15} /></button></div>
       </div>{writing && <div className="quality-meter"><span>Prompt signal</span><i><b style={{ width: `${quality}%` }} /></i><strong>{quality}%</strong></div>}
+      {writing && validation.warnings.length > 0 && <p className="validation-note">{validation.warnings[0].message}</p>}
     </section>
     {!writing ? <section className="examples"><p>Try an example</p><div>{EXAMPLES.map((example) => <button key={example} onClick={() => set("prompt", example)}>{example}</button>)}</div></section> : <section className="result-area"><div className="selected-dots"><span>Refinements</span>{pillEntries.map(({ key, value }) => <button key={key} onClick={() => key === "task" ? changeTask("None") : set(key, "None" as never)}>{value} ×</button>)}</div><div className="result-grid"><article><div className="result-heading"><div><p>Refined prompt</p><h2>Ready for any model</h2></div><button onClick={copy}>{copied ? <Check size={15} /> : <Clipboard size={15} />} {copied ? "Copied" : "Copy"}</button></div><pre>{prompt}</pre></article><aside><div className="result-heading"><div><p>Portable contract</p><h2>prompt-refinement.json</h2></div><FileJson size={18} /></div><pre>{JSON.stringify(schema, null, 2)}</pre></aside></div></section>}
     <footer><span>Built with the <a href="https://github.com/TechQuanta" target="_blank" rel="noreferrer">TechQuanta Community</a></span><a className="footer-source" href="https://github.com/TechQuanta/prompt_builder" target="_blank" rel="noreferrer">View on GitHub</a></footer>

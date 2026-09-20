@@ -65,6 +65,7 @@ main.dark { --bg: #000; --fg: #f4f4ef; --muted: #989890; --line: #30302d; --card
 .quality-meter i { display: block; flex: 1; height: 4px; overflow: hidden; border-radius: 99px; background: var(--soft); }
 .quality-meter b { display: block; height: 100%; border-radius: 99px; background: var(--fg); transition: width .35s cubic-bezier(.2,.8,.2,1); }
 .quality-meter strong { color: var(--fg); font-size: 11px; }
+.validation-note { max-width: 840px; margin: 8px auto 0; color: var(--muted); font-size: 11px; text-align: center; }
 
 .examples { max-width: 840px; margin: 27px auto 0; animation: lift .55s ease-out; }
 .examples p { color: var(--muted); font-size: 12px; }
