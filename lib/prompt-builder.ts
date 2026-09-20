@@ -52,7 +52,7 @@ export function selectedEntries(brief: PromptBrief) {
 export function compilePrompt(brief: PromptBrief) {
   const lines = selectedEntries(brief).map(({ label, value }) => `${label}: ${value}`);
   if (brief.constraints.length) lines.push(`Constraints: ${brief.constraints.join("; ")}`);
-  const safePrompt = (brief.prompt.trim() || "[Enter your prompt]").replaceAll("</user_request>", "<\\/user_request>").replaceAll("<user_request>", "<\\user_request>");
+  const safePrompt = (brief.prompt.trim() || "[Enter your prompt]").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
   const request = `<user_request>\n${safePrompt}\n</user_request>`;
   const task = brief.task === "None" ? "request" : `${brief.task.toLowerCase()} task`;
   const closer = brief.task === "Image prompt" ? "Return one ready-to-paste image-generation prompt and nothing else." : brief.task === "Code" ? "Return the code or fix first, with only the explanation needed to use it." : brief.task === "Write" ? "Deliver only the finished piece, with no preamble or commentary." : brief.task === "Research" ? "Lead with a direct answer, then the key supporting points." : brief.task === "Plan" ? "Give the plan directly, with concrete next actions." : "Answer directly and concisely.";
