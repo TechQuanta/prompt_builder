@@ -56,6 +56,13 @@ button:hover { transform: translateY(-1px); }
 button:active { transform: translateY(0) scale(.98); }
 @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
 
+.parallax-backdrop { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.parallax-orbit { position: absolute; display: block; width: 46rem; height: 46rem; border: 1px solid color-mix(in srgb, var(--foreground), transparent 90%); border-radius: 999px; will-change: transform; }
+.parallax-orbit-one { top: -27rem; right: -18rem; }
+.parallax-orbit-two { bottom: -31rem; left: -22rem; width: 58rem; height: 58rem; }
+.parallax-grid { position: absolute; inset: -20%; display: block; opacity: .3; background-image: linear-gradient(color-mix(in srgb, var(--foreground), transparent 96%) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--foreground), transparent 96%) 1px, transparent 1px); background-size: 48px 48px; will-change: transform; }
+@media (prefers-reduced-motion: reduce) { .parallax-backdrop { display: none; } }
+
 /* 2. COMPONENT KIT */
 @layer components {
   .heading-architect {
