@@ -56,11 +56,17 @@ button:hover { transform: translateY(-1px); }
 button:active { transform: translateY(0) scale(.98); }
 @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
 
-.parallax-backdrop { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.parallax-backdrop { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+body > main { position: relative; z-index: 1; }
 .parallax-orbit { position: absolute; display: block; width: 46rem; height: 46rem; border: 1px solid color-mix(in srgb, var(--foreground), transparent 90%); border-radius: 999px; will-change: transform; }
 .parallax-orbit-one { top: -27rem; right: -18rem; }
 .parallax-orbit-two { bottom: -31rem; left: -22rem; width: 58rem; height: 58rem; }
-.parallax-grid { position: absolute; inset: -20%; display: block; opacity: .3; background-image: linear-gradient(color-mix(in srgb, var(--foreground), transparent 96%) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--foreground), transparent 96%) 1px, transparent 1px); background-size: 48px 48px; will-change: transform; }
+.parallax-grid { position: absolute; inset: -20%; display: block; opacity: .5; background-image: linear-gradient(color-mix(in srgb, var(--foreground), transparent 96%) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--foreground), transparent 96%) 1px, transparent 1px); background-size: 48px 48px; will-change: transform; }
+.scroll-progress { position: fixed; top: 0; right: 18px; bottom: 0; width: 2px; background: var(--foreground); transform-origin: top; opacity: .72; will-change: transform; }
+.scroll-progress::after { content: ""; position: absolute; top: 100%; left: 50%; width: 7px; height: 7px; border: 2px solid var(--foreground); border-radius: 50%; transform: translate(-50%, -50%); background: var(--background); }
+.workspace-enter > section { animation: rise-in 600ms cubic-bezier(.2,.8,.2,1) both; }
+.workspace-enter > section:nth-of-type(2) { animation-delay: 100ms; }
+.workspace-enter > section:nth-of-type(3) { animation-delay: 180ms; }
 @media (prefers-reduced-motion: reduce) { .parallax-backdrop { display: none; } }
 
 /* 2. COMPONENT KIT */
