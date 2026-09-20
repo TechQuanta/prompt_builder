@@ -3,8 +3,8 @@ import "./globals.css";
 import { ParallaxBackground } from "@/components/ParallaxBackground";
 
 export const metadata: Metadata = {
-  title: "Prompt Builder | Deterministic prompt design",
-  description: "Turn a rough idea into a structured, portable AI prompt.",
+  title: "Prompt Refiner | Deterministic prompt quality",
+  description: "Refine intent, structure, constraints, and output before a prompt reaches an LLM.",
 };
 
 export default function RootLayout({

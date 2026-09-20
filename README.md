@@ -1,7 +1,7 @@
-# Prompt Builder
+# Prompt Refiner
 
-A local-first prompt workspace. Write one request, optionally select controls,
-then copy a deterministic prompt or inspect its portable JSON contract.
+A local-first prompt-quality workspace. Write one request, optionally choose a
+prompt type, then copy a refined prompt or inspect its portable JSON contract.
 
 ## Run locally
 
