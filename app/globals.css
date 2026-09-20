@@ -10,15 +10,21 @@
 /* 1. PHYSICAL UI VARIABLES */
 @layer base {
   :root {
-    --background: #0b1020;
-    --foreground: #f8fafc;
+    --background: #f8fafc;
+    --foreground: #172033;
+    --surface: #ffffff;
+    --panel: #f1f5f9;
+    --line: #d9e1ec;
     --primary: #67e8f9;
     --primary-rgb: 103, 232, 249;
   }
 
   .dark {
-    --background: #000000;
-    --foreground: #ffffff;
+    --background: #0b1020;
+    --foreground: #e8edf5;
+    --surface: #111a2e;
+    --panel: #0e1628;
+    --line: #26334c;
   }
 
   html {
