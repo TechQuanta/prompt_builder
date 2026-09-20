@@ -63,7 +63,7 @@ export default function Page() {
   const [brief, setBrief] = useState<PromptBrief>(defaultBrief);
   const [menu, setMenu] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState(false);
   const schema = useMemo(() => toSchema(brief), [brief]);
   const prompt = useMemo(() => compilePrompt(brief), [brief]);
   const writing = Boolean(brief.prompt.trim());

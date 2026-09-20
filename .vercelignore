@@ -1,0 +1,8 @@
+.pytest_cache/
+.venv/
+node_modules/
+.next/
+coverage/
+*.py[cod]
+__pycache__/
+.git/
